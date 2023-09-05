@@ -6,7 +6,8 @@ for the sonar rock vs mine classification system.
 """
 
 # Data Source Configuration
-DATA_URL = "https://archive.ics.uci.edu/ml/machine-learning-databases/undocumented/connectionist-bench/sonar/sonar.all-data"
+# Path to the manually downloaded sonar dataset
+DATA_FILE_PATH = "data/raw/sonar.all-data"
 
 # Reproducibility
 RANDOM_SEED = 42

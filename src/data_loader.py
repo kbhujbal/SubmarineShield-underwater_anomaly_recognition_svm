@@ -1,35 +1,48 @@
 """
 Data loader module for UCI Sonar dataset.
 
-This module handles fetching and loading the sonar dataset from the UCI Machine Learning
-Repository. The dataset contains sonar chirp frequency data across 60 bands.
+This module handles loading the sonar dataset from a local file.
+The dataset contains sonar chirp frequency data across 60 bands.
 """
 
 import logging
+import os
 import pandas as pd
 from typing import Tuple
 
 logger = logging.getLogger(__name__)
 
 
-def load_sonar_data(url: str) -> pd.DataFrame:
+def load_sonar_data(file_path: str) -> pd.DataFrame:
     """
-    Load the Sonar dataset from UCI Machine Learning Repository.
+    Load the Sonar dataset from a local file.
 
     The dataset contains 208 samples of sonar returns bounced off either a metal
     cylinder (mine) or rocks. Each sample has 60 features representing energy
     within a particular frequency band, integrated over time.
 
     Args:
-        url: URL to the sonar.all-data file from UCI repository
+        file_path: Path to the sonar.all-data file (manually downloaded from UCI)
 
     Returns:
         DataFrame containing 60 feature columns (0-59) and 1 label column ('label')
 
     Raises:
-        Exception: If data cannot be loaded from the URL
+        FileNotFoundError: If the dataset file does not exist
+        Exception: If data cannot be loaded from the file
     """
-    logger.info(f"Loading sonar data from URL: {url}")
+    logger.info(f"Loading sonar data from local file: {file_path}")
+
+    # Check if file exists
+    if not os.path.exists(file_path):
+        error_msg = (
+            f"Dataset file not found at: {file_path}\n"
+            f"Please download the dataset from:\n"
+            f"https://archive.ics.uci.edu/ml/machine-learning-databases/undocumented/connectionist-bench/sonar/sonar.all-data\n"
+            f"And save it as: {file_path}"
+        )
+        logger.error(error_msg)
+        raise FileNotFoundError(error_msg)
 
     try:
         # The UCI sonar dataset has no header row
@@ -37,7 +50,7 @@ def load_sonar_data(url: str) -> pd.DataFrame:
         column_names = [f"feature_{i}" for i in range(60)] + ["label"]
 
         df = pd.read_csv(
-            url,
+            file_path,
             header=None,
             names=column_names
         )
@@ -52,7 +65,7 @@ def load_sonar_data(url: str) -> pd.DataFrame:
         return df
 
     except Exception as e:
-        logger.error(f"Failed to load data from {url}: {str(e)}")
+        logger.error(f"Failed to load data from {file_path}: {str(e)}")
         raise
 
 

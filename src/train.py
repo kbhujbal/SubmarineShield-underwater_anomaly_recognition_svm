@@ -2,7 +2,7 @@
 Main training script for Submarine AI Sonar Classification.
 
 This module orchestrates the complete ML pipeline:
-1. Data loading from UCI repository
+1. Data loading from local file
 2. Preprocessing and label encoding
 3. Train-test split with stratification
 4. SVM model training with hyperparameter tuning via GridSearchCV

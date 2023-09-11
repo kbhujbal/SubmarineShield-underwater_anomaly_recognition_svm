@@ -124,8 +124,8 @@ def main():
     logger.info("=" * 70)
 
     # Step 1: Load data
-    logger.info("\n[STEP 1] Loading dataset from UCI repository")
-    df = load_sonar_data(config.DATA_URL)
+    logger.info("\n[STEP 1] Loading dataset from local file")
+    df = load_sonar_data(config.DATA_FILE_PATH)
 
     # Step 2: Split features and labels
     logger.info("\n[STEP 2] Splitting features and labels")

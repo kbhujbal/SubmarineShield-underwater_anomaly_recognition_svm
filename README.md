@@ -1,4 +1,4 @@
-# SubmarineAI - Sonar Rock vs Mine Classification
+# SubmarineShield - Underwater Anomaly Recognition (SVM)
 
 A production-grade machine learning system for underwater threat detection using sonar signal processing.
 
@@ -11,7 +11,7 @@ This project implements a binary classification system to distinguish between un
 ## Dataset
 
 - **Source**: UCI Machine Learning Repository - Connectionist Bench (Sonar, Mines vs. Rocks)
-- **URL**: https://archive.ics.uci.edu/ml/machine-learning-databases/undocumented/connectionist-bench/sonar/sonar.all-data
+- **Download URL**: https://archive.ics.uci.edu/ml/machine-learning-databases/undocumented/connectionist-bench/sonar/sonar.all-data
 - **Size**: 208 samples
 - **Features**: 60 numeric features (frequency band energy readings)
 - **Labels**:
@@ -19,20 +19,32 @@ This project implements a binary classification system to distinguish between un
   - `M` (Mine) → encoded as `1`
 - **Challenge**: Small dataset with high dimensionality
 
+### Manual Dataset Download Required
+
+**IMPORTANT**: You must manually download the dataset before running the training pipeline.
+
+1. Download the dataset from: https://archive.ics.uci.edu/ml/machine-learning-databases/undocumented/connectionist-bench/sonar/sonar.all-data
+2. Save the file as `sonar.all-data` in the `data/raw/` directory
+3. Verify the file path: `data/raw/sonar.all-data`
+
 ## Technical Architecture
 
 ### Project Structure
 
 ```
-SubmarineAI-sonar_rock_vs_mine_classification/
+SubmarineShield-underwater_anomaly_recognition_svm/
 ├── config.py                    # Centralized configuration
 ├── requirements.txt             # Python dependencies
 ├── README.md                    # Documentation (this file)
+├── data/                        # Dataset directory
+│   ├── raw/                     # Raw data folder
+│   │   └── sonar.all-data       # UCI dataset (manually downloaded)
+│   └── README.md                # Dataset documentation
 ├── models/                      # Trained model artifacts
 │   └── sonar_svm_model.joblib   # Saved SVM pipeline
 └── src/                         # Source code modules
     ├── __init__.py
-    ├── data_loader.py           # UCI dataset loading
+    ├── data_loader.py           # Local dataset loading
     ├── preprocessing.py         # Label encoding
     ├── evaluation.py            # Model evaluation metrics
     └── train.py                 # Main training pipeline
@@ -61,26 +73,34 @@ GridSearchCV optimizes the following parameters:
 - **Gamma**: `['scale', 'auto', 0.001, 0.01, 0.1, 1]`
   - Controls influence radius of support vectors
 
-## Installation
+## Installation & Setup
 
 ### Prerequisites
 
 - Python 3.8+
 - pip package manager
 
-### Setup
+### Setup Steps
 
 ```bash
 # Clone or navigate to project directory
-cd SubmarineAI-sonar_rock_vs_mine_classification
+cd SubmarineShield-underwater_anomaly_recognition_svm
 
 # Install dependencies
 pip install -r requirements.txt
+
+# Download the dataset manually
+# Visit: https://archive.ics.uci.edu/ml/machine-learning-databases/undocumented/connectionist-bench/sonar/sonar.all-data
+# Save as: data/raw/sonar.all-data
 ```
+
+**Important**: The dataset file must be placed at `data/raw/sonar.all-data` before running the training script.
 
 ## Usage
 
 ### Training the Model
+
+**Prerequisites**: Ensure you have downloaded the dataset to `data/raw/sonar.all-data`
 
 Run the complete training pipeline:
 
@@ -89,12 +109,14 @@ python src/train.py
 ```
 
 This will:
-1. Download the dataset from UCI repository
-2. Preprocess and encode labels
+1. Load the dataset from the local file (`data/raw/sonar.all-data`)
+2. Preprocess and encode labels (R→0, M→1)
 3. Split data (80% train, 20% test) with stratification
 4. Perform GridSearchCV for hyperparameter optimization (5-fold CV)
 5. Evaluate the best model on the test set
 6. Save the trained pipeline to `models/sonar_svm_model.joblib`
+
+**Note**: If the dataset file is missing, you'll receive a helpful error message with download instructions.
 
 ### Expected Output
 
@@ -125,9 +147,9 @@ For submarine operations, we prioritize:
 
 ## Configuration
 
-All hyperparameters and settings are centralized in [`config.py`](config.py):
+All hyperparameters and settings are centralized in [config.py](config.py):
 
-- Data source URL
+- Data file path (`data/raw/sonar.all-data`)
 - Random seed (42) for reproducibility
 - Train-test split ratio (0.2)
 - SVM hyperparameter grid

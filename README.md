@@ -190,7 +190,7 @@ The saved pipeline includes both the StandardScaler and SVC, so no separate prep
 
 ## License
 
-This project is for educational and research purposes.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## References
 
